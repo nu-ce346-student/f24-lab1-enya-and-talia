@@ -8,6 +8,7 @@ typedef enum {
   GPIO_OUTPUT,
 } gpio_direction_t;
 
+
 // Inputs: 
 //  gpio_num - gpio number 0-31 OR (32 + gpio number)
 //  dir - gpio direction (INPUT, OUTPUT)

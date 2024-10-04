@@ -12,6 +12,10 @@
 #include "microbit_v2.h"
 #include "gpio.h"
 
+uint32_t gpio = 0x50000000;
+uint32_t out = 0x504;
+uint32_t dir = 0x514;
+
 int main(void) {
   printf("Board started!\n");
 
@@ -21,6 +25,8 @@ int main(void) {
   // Control LED with raw MMIO
   // Microphone LED is P0.20 and active high
   // Add code here
+  *(uint32_t*) (gpio+dir) = 1<<20;
+  *(uint32_t*) (gpio+out) = 1<<20;
 
   // loop forever
   printf("Looping\n");
