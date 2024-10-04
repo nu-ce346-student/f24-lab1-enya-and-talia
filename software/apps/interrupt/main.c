@@ -34,6 +34,7 @@ void GPIOTE_IRQHandler(void) {
   NRF_GPIOTE->EVENTS_IN[0] = 0;
 
   // Implement me
+  printf("Interupted!\n");
 }
 
 int main(void) {
@@ -44,6 +45,13 @@ int main(void) {
   //    where the register name in all caps goes after the arrow.
   //    For example, NRF_GPIOTE->CONFIG[0]
   // Add code here
+  NRF_GPIOTE->CONFIG[0] = 1;
+  NRF_GPIOTE->CONFIG[0] |= 14<<8;
+  NRF_GPIOTE->CONFIG[0] |= 2<<16;
+  NRF_GPIOTE->INTENSET = 1;
+
+  NVIC_EnableIRQ(GPIOTE_IRQn);
+  NVIC_SetPriority(GPIOTE_IRQn, 1);
 
 
   // Second task. Trigger a software interrupt
