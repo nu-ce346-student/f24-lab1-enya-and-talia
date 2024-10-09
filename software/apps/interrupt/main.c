@@ -27,6 +27,9 @@ void SWI1_EGU1_IRQHandler(void) {
   NRF_EGU1->EVENTS_TRIGGERED[0] = 0;
 
   // Implement me
+  printf("Software interrupt started!\n");
+  nrf_delay_ms(5000);
+  printf("Software interrupt ended!\n");
 }
 
 void GPIOTE_IRQHandler(void) {
@@ -34,7 +37,7 @@ void GPIOTE_IRQHandler(void) {
   NRF_GPIOTE->EVENTS_IN[0] = 0;
 
   // Implement me
-  printf("Interupted!\n");
+  printf("Button interrupt!\n");
 }
 
 int main(void) {
@@ -57,11 +60,14 @@ int main(void) {
   // Second task. Trigger a software interrupt
   // Use the software_interupt_* functions defined above
   // Add code here
-
+  NVIC_SetPriority(SWI1_EGU1_IRQn, 2);
+  software_interrupt_init();
+  
 
   // loop forever
   while (1) {
     printf("Looping\n");
+    software_interrupt_trigger();
     nrf_delay_ms(1000);
   }
 }

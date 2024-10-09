@@ -27,10 +27,12 @@ void gpio_config(uint8_t gpio_num, gpio_direction_t dir) {
   // This function should configure the pin as an input/output
   // Hint: Use proper PIN_CNF instead of DIR
   if (gpio_num<32) {
-  	gpio_p0->DIRSET=dir;
+  	gpio_p0->PIN_CNF[gpio_num]|=dir;
+  	gpio_p0->PIN_CNF[gpio_num]&=~2;
   }
   else {
-  	gpio_p1->DIRSET=dir;
+  	gpio_p1->PIN_CNF[gpio_num-32]|=dir;
+  	gpio_p1->PIN_CNF[gpio_num-32]&=~2;
   }
 }
 
@@ -40,6 +42,12 @@ void gpio_set(uint8_t gpio_num) {
   // Implement me
   // This function should make the pin high
   // It can assume that the pin has already been configured
+  if (gpio_num<32) {
+  	gpio_p0->OUTSET=1<<gpio_num;
+  }
+  else {
+  	gpio_p1->OUTSET=1<<(gpio_num-32);
+  }
 }
 
 // Inputs: 
@@ -48,6 +56,12 @@ void gpio_clear(uint8_t gpio_num) {
   // Implement me
   // This function should make the pin low
   // It can assume that the pin has already been configured
+  if (gpio_num<32) {
+   	gpio_p0->OUTCLR=(1<<gpio_num);
+  }
+  else {
+   	gpio_p1->OUTCLR=(1<<(gpio_num-32));
+  }
 }
 
 // Inputs: 
@@ -58,8 +72,10 @@ bool gpio_read(uint8_t gpio_num) {
   // Implement me
   // This function should read the value from the pin
   // It can assume that the pin has already been configured
-
-  return true;
+  if (gpio_num<32) {
+  	return ((gpio_p0->IN)>>gpio_num)&1;
+  }
+  return ((gpio_p0->IN)>>(gpio_num-32))&1;
 }
 
 // prints out some information about the GPIO driver. Can be called from main()
